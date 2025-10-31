@@ -1,0 +1,66 @@
+services:
+  vm1:
+    image: redis:7
+    container_name: vm1
+    ports:
+      - "7001:7001"  # shard1 master
+      - "7002:7002"  # replica2 slave
+    volumes:
+      - ./conf/vm1-shard1.conf:/usr/local/etc/redis/redis-7001.conf
+      - ./conf/vm1-replica2.conf:/usr/local/etc/redis/redis-7002.conf
+      - ./data/vm1:/data
+    networks:
+      redis-net:
+        ipv4_address: 172.20.0.11
+    command: >
+      bash -c "
+      redis-server /usr/local/etc/redis/redis-7001.conf &
+      redis-server /usr/local/etc/redis/redis-7002.conf
+      "
+    restart: unless-stopped
+  vm2:
+    image: redis:7
+    container_name: vm2
+    ports:
+      - "7003:7003"  # shard2 master
+      - "7004:7004"  # replica3 slave
+    volumes:
+      - ./conf/vm2-shard2.conf:/usr/local/etc/redis/redis-7003.conf
+      - ./conf/vm2-replica3.conf:/usr/local/etc/redis/redis-7004.conf
+      - ./data/vm2:/data
+    networks:
+      redis-net:
+        ipv4_address: 172.20.0.12
+    command: >
+      bash -c "
+      redis-server /usr/local/etc/redis/redis-7003.conf &
+      redis-server /usr/local/etc/redis/redis-7004.conf
+      "
+    restart: unless-stopped
+
+  vm3:
+    image: redis:7
+    container_name: vm3
+    ports:
+      - "7005:7005"  # shard3 master
+      - "7006:7006"  # replica1 slave
+    volumes:
+      - ./conf/vm3-shard3.conf:/usr/local/etc/redis/redis-7005.conf
+      - ./conf/vm3-replica1.conf:/usr/local/etc/redis/redis-7006.conf
+      - ./data/vm3:/data
+    networks:
+      redis-net:
+        ipv4_address: 172.20.0.13
+    command: >
+      bash -c "
+      redis-server /usr/local/etc/redis/redis-7005.conf &
+      redis-server /usr/local/etc/redis/redis-7006.conf
+      "
+    restart: unless-stopped
+
+networks:
+  redis-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

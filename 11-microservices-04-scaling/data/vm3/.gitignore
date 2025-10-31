@@ -1,0 +1,39 @@
+# Docker related
+docker-compose.override.yml
+docker-compose.override.yaml
+*.log
+*.tmp
+
+# Docker data folders
+data/vm1/appendonlydir/
+data/vm2/appendonlydir/
+data/vm3/appendonlydir/
+
+# Redis cluster config files
+*.rdb
+nodes-*.conf
+appendonly.aof*
+
+# System files and folders
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.iml
+
+# OS generated files
+*.swp
+*~
+
+# Environment variables and secrets
+.env
+
+# Node.js dependencies (if any frontend used)
+node_modules/
+
+# Python cache files (if any Python used in project)
+__pycache__/
+*.pyc
+*.pyo
